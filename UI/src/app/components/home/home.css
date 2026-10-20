@@ -1,0 +1,30 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: #26364a;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.brand {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.home-btn {
+    background-color: #ffffff;
+    color: #24364a;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.home-btn:hover {
+    background-color: #e5eaf0;
+}
