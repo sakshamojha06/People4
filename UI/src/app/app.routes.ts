@@ -18,7 +18,7 @@ export const routes: Routes = [
         component: AddPerson
     },
     {
-        path: 'edit-person',
+        path: 'edit-person/:id',
         component: EditPerson
     }
 ];

@@ -1,1 +1,264 @@
-<p>people-list works!</p>
+<div class="people-container">
+
+    <div class="page-header">
+        <h2>People List</h2>
+
+        <button class="btn btn-success" routerLink="/add-person">
+            <i class="bi bi-plus-lg"></i>
+            Add Person
+        </button>
+    </div>
+
+    @if (loading()) {
+        <p class="message">Loading people...</p>
+    }
+    @else if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
+    }
+    @else if (people().length === 0) {
+        <p class="message">No people found.</p>
+    }
+    @else {
+
+        <div class="table-container">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <input
+                                type="checkbox"
+                                class="form-check-input"
+                                [checked]="allSelected()"
+                                (change)="toggleAll($any($event.target).checked)">
+                        </th>
+
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Date Of Birth</th>
+                        <th>Gender</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (person of people(); track person.id) {
+
+                        <tr [class.selected-row]="isSelected(person.id)">
+
+                            <td>
+                                <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    [checked]="isSelected(person.id)"
+                                    (change)="togglePerson(
+                                        person.id,
+                                        $any($event.target).checked
+                                    )">
+                            </td>
+
+                            <td>{{ person.id }}</td>
+
+                            <td>{{ person.name }}</td>
+
+                            <td>
+                                {{ person.dateOfBirth | date:'dd-MM-yyyy' }}
+                            </td>
+
+                            <td>{{ person.gender }}</td>
+
+                            <td class="actions">
+
+                                <button
+                                    class="btn btn-primary btn-sm me-2"
+                                    [routerLink]="['/edit-person', person.id]">
+
+                                    <i class="bi bi-pencil-square"></i>
+                                    Edit
+                                </button>
+
+                                <button
+                                    class="btn btn-danger btn-sm"
+                                    (click)="confirmDelete(person)">
+
+                                    <i class="bi bi-trash"></i>
+                                    Delete
+                                </button>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+        @if (selectedIds().length > 0) {
+
+            <div class="bulk-actions">
+
+                <div class="selected-count">
+                    {{ selectedIds().length }} row(s) selected
+                </div>
+
+                <div class="bulk-buttons">
+
+                    <button
+                        class="btn btn-danger"
+                        (click)="confirmBulkDelete()">
+
+                        <i class="bi bi-trash"></i>
+                        Delete Selected ({{ selectedIds().length }})
+
+                    </button>
+
+                    <button
+                        class="btn btn-secondary"
+                        (click)="clearSelection()">
+
+                        <i class="bi bi-x-lg"></i>
+                        Clear Selection
+
+                    </button>
+
+                </div>
+
+            </div>
+        }
+
+    }
+
+</div>
+
+
+<!-- Single Delete Confirmation Modal -->
+@if (personPendingDelete(); as person) {
+
+    <div class="modal-backdrop fade show"></div>
+
+    <div class="modal fade show d-block"
+         tabindex="-1"
+         role="dialog"
+         aria-modal="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">
+                        Confirm Delete
+                    </h2>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        [disabled]="deleting()"
+                        (click)="cancelDelete()">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    Are you sure you want to delete
+                    <strong>{{ person.name }}</strong>?
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        [disabled]="deleting()"
+                        (click)="cancelDelete()">
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-danger"
+                        [disabled]="deleting()"
+                        (click)="deletePerson()">
+
+                        @if (deleting()) {
+                            Deleting...
+                        } @else {
+                            Yes, Delete
+                        }
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+
+<!-- Bulk Delete Confirmation Modal -->
+@if (showBulkDeleteModal()) {
+
+    <div class="modal-backdrop fade show"></div>
+
+    <div class="modal fade show d-block"
+         tabindex="-1"
+         role="dialog"
+         aria-modal="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">
+                        Confirm Bulk Delete
+                    </h2>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        [disabled]="deleting()"
+                        (click)="cancelBulkDelete()">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    Are you sure you want to delete
+                    <strong>{{ selectedIds().length }}</strong>
+                    selected people?
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        [disabled]="deleting()"
+                        (click)="cancelBulkDelete()">
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-danger"
+                        [disabled]="deleting()"
+                        (click)="deleteSelectedPeople()">
+
+                        @if (deleting()) {
+                            Deleting...
+                        } @else {
+                            Yes, Delete All
+                        }
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+}

@@ -1,0 +1,43 @@
+.add-person-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.add-person-container h2 {
+  color: #26364a;
+  margin-bottom: 25px;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #26364a;
+}
+
+.form-control {
+  width: 100%;
+}
+
+.form-actions {
+  margin-top: 25px;
+  text-align: right;
+}
+
+.form-actions button {
+  min-width: 100px;
+}
+
+.form-actions i {
+  margin-right: 5px;
+}

@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Person } from '../Models/Person';
 
 @Injectable({ providedIn: 'root' })
-export class Person {
+export class PersonService {
     private http = inject(HttpClient);
 
     private apiUrl = 'http://localhost:5044/api/Person';
